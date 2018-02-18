@@ -48,4 +48,4 @@ for extension, file_list in extensions.iteritems():
     for fpath in file_list:
         fname = os.path.basename(fpath)
         os.rename(fpath, os.path.join(target_dir, fname))
-raw_input("Done")
+input("Done")
