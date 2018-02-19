@@ -29,3 +29,9 @@ class User(models.Model):
     protected = models.BooleanField()
     followers_count = models.IntegerField()
     status_count = models.IntegerField()
+
+    def __unicode__(self):
+        return self.name
+
+    def __str__(self):
+        return self.name

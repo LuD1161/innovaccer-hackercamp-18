@@ -1,13 +1,21 @@
 import time
 
 from django.http import HttpResponse
+from django_filters.rest_framework import DjangoFilterBackend
+from rest_framework.filters import SearchFilter
 from tweepy import Stream
 from tweepy import OAuthHandler
 from tweepy.streaming import StreamListener
 from tweepy import API
-import json
-
 from twitter_api.settings import consumer_key, consumer_secret, access_token_secret, access_token
+
+from rest_framework import viewsets, mixins
+
+from .filters import Filter_followers_count
+from .serializers import (
+    UserSerializer,
+    TweetSerializer)
+from .pagination import LimitTenPagination
 
 from .models import Tweets, User
 
@@ -29,7 +37,7 @@ class listener(StreamListener):
     def on_error(self, status_code):
         print status_code
 
-
+# Not used upto now
 twitterStream = Stream(auth=auth, listener=listener())
 
 
@@ -125,3 +133,21 @@ def get_track(request):
                                               user=user)
         final.append(j_data)
     return HttpResponse(final)
+
+
+class TweetViewSet(mixins.ListModelMixin, viewsets.GenericViewSet):
+    serializer_class = TweetSerializer
+    queryset = Tweets.objects.all()
+    filter_backends = (DjangoFilterBackend, SearchFilter)
+    filter_fields = ('text', 'place', 'user')
+    pagination_class = LimitTenPagination
+    search_fields = ('text', 'place', 'user')
+
+
+class UserViewSet(mixins.ListModelMixin, viewsets.GenericViewSet):
+    serializer_class = UserSerializer
+    queryset = User.objects.all()
+    filter_backends = (DjangoFilterBackend, SearchFilter)
+    filter_fields = ('name', 'screen_name', 'location')
+    pagination_class = LimitTenPagination
+    search_fields = ('name', 'screen_name', 'location')
