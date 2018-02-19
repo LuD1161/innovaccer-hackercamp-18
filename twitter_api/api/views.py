@@ -8,16 +8,15 @@ from tweepy import OAuthHandler
 from tweepy.streaming import StreamListener
 from tweepy import API
 from twitter_api.settings import consumer_key, consumer_secret, access_token_secret, access_token
-
 from rest_framework import viewsets, mixins
 
-from .filters import Filter_followers_count
+from .filters import UserFilter, TweetFilter
 from .serializers import (
     UserSerializer,
     TweetSerializer)
 from .pagination import LimitTenPagination
-
 from .models import Tweets, User
+
 
 auth = OAuthHandler(consumer_key, consumer_secret)
 auth.set_access_token(access_token, access_token_secret)
@@ -25,6 +24,7 @@ auth.set_access_token(access_token, access_token_secret)
 api = API(auth)
 
 
+# Not used upto nows
 class listener(StreamListener):
     def on_data(self, raw_data):
         try:
@@ -36,6 +36,7 @@ class listener(StreamListener):
 
     def on_error(self, status_code):
         print status_code
+
 
 # Not used upto now
 twitterStream = Stream(auth=auth, listener=listener())
@@ -135,19 +136,22 @@ def get_track(request):
     return HttpResponse(final)
 
 
-class TweetViewSet(mixins.ListModelMixin, viewsets.GenericViewSet):
+class TweetViewSet(mixins.ListModelMixin,
+                   mixins.RetrieveModelMixin,
+                   viewsets.GenericViewSet):
     serializer_class = TweetSerializer
     queryset = Tweets.objects.all()
     filter_backends = (DjangoFilterBackend, SearchFilter)
-    filter_fields = ('text', 'place', 'user')
     pagination_class = LimitTenPagination
-    search_fields = ('text', 'place', 'user')
+    filter_class = TweetFilter
 
 
-class UserViewSet(mixins.ListModelMixin, viewsets.GenericViewSet):
+class UserViewSet(mixins.ListModelMixin,
+                  mixins.RetrieveModelMixin,
+                  viewsets.GenericViewSet):
     serializer_class = UserSerializer
     queryset = User.objects.all()
-    filter_backends = (DjangoFilterBackend, SearchFilter)
-    filter_fields = ('name', 'screen_name', 'location')
+    filter_backends = (DjangoFilterBackend,)
+    # filter_fields = ('name', 'screen_name', 'location')
     pagination_class = LimitTenPagination
-    search_fields = ('name', 'screen_name', 'location')
+    filter_class = UserFilter
