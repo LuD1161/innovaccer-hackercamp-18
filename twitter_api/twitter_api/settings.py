@@ -124,7 +124,7 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/2.0/howto/static-files/
 
 STATIC_URL = '/static/'
-consumer_key = 'CtMElsTOOjWRLZkvIj5drjaIL'
-consumer_secret = 'EFrAsCJotAFJzffEFcSq5k1jZvIHflz99lOI4HzG68teU6bi5J'
-access_token = '880863186936750082-wtxodAMRGrwCMssYyHmANnYGXzaCW0w'
-access_token_secret = 'IoHzdu8gkq00SCPwWEpzPvtQ7sE4hkgWbZBTob4xUyE64'
+consumer_key = 'ADD_YOUR_CONSUMER_KEY'
+consumer_secret = 'ADD_YOUR_CONSUMER_SECRET'
+access_token = 'ADD_ACCESS_TOKEN'
+access_token_secret = 'ADD_ACCESS_TOKEN_SECRET'
