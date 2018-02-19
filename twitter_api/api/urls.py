@@ -8,8 +8,16 @@ tweet_list = TweetViewSet.as_view({
     'get': 'list'
 })
 
+tweet_detail = TweetViewSet.as_view({
+    'get': 'retrieve'
+})
+
 user_list = UserViewSet.as_view({
     'get': 'list'
+})
+
+user_detail = UserViewSet.as_view({
+    'get': 'retrieve'
 })
 
 router = DefaultRouter()
@@ -21,3 +29,4 @@ urlpatterns = [
     url(r'^query/$', views.get_track, name='query'),
     url(r'^', include(router.urls))
 ]
+print(router.urls)
