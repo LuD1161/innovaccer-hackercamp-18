@@ -40,6 +40,8 @@ python manage.py runserver
 ### CSV
 **GET** `/api/tweets/?format=csv&id=&id__contains=&in_reply_to_screen_name=&in_reply_to_screen_name__icontains=&place=&place__icontains=&text=&text__icontains=`
 
+_CSV format to export filtered data from API_
+
 ### JSON
 **GET** `/api/tweets/?format=json&id=&id__contains=&in_reply_to_screen_name=&in_reply_to_screen_name__icontains=&place=&place__icontains=&text=&text__icontains=`
 
@@ -61,3 +63,8 @@ python manage.py runserver
 ```
 Python 2.7.14+
 ```
+
+
+# To Do 
+- [ ] Switch over to twitter streaming API with start and stop request , the code is already there only need to add endpoints to start and stop streaming.
+- [ ] Switch to NoSQL database ( switch to mongodb as database backend )
