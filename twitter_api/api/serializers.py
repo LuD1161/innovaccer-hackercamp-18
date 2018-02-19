@@ -18,7 +18,6 @@ class TweetSerializer(serializers.HyperlinkedModelSerializer):
     username = SerializerMethodField()
 
     def get_username(self, obj):
-        # print(type(obj))
         return obj.user.name
 
     class Meta:

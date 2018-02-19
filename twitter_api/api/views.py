@@ -1,8 +1,9 @@
 import time
 
-from django.http import HttpResponse
-from django_filters.rest_framework import DjangoFilterBackend
-from rest_framework.filters import SearchFilter
+from django.shortcuts import redirect
+# from django_filters.rest_framework import DjangoFilterBackend
+from rest_framework.decorators import api_view
+from rest_framework.filters import OrderingFilter, DjangoFilterBackend
 from tweepy import Stream
 from tweepy import OAuthHandler
 from tweepy.streaming import StreamListener
@@ -16,7 +17,6 @@ from .serializers import (
     TweetSerializer)
 from .pagination import LimitTenPagination
 from .models import Tweets, User
-
 
 auth = OAuthHandler(consumer_key, consumer_secret)
 auth.set_access_token(access_token, access_token_secret)
@@ -42,62 +42,11 @@ class listener(StreamListener):
 twitterStream = Stream(auth=auth, listener=listener())
 
 
+@api_view(['GET'])
 def get_track(request):
     query = request.GET.get('q')
     results = api.search(q=query)
     final = []
-    """
-    keys 
-    contributors
-    truncated
-    text
-    is_quote_status
-    in_reply_to_status_id
-    id
-    favorite_count
-    entities
-    quoted_status_id
-    retweeted
-    coordinates
-    source
-    in_reply_to_screen_name
-    in_reply_to_user_id
-    retweet_count
-    id_str
-    favorited
-    retweeted_status
-    user
-    geo
-    in_reply_to_user_id_str
-    lang
-    created_at
-    quoted_status_id_str
-    in_reply_to_status_id_str
-    place
-    metadata
-    
-    timestamp_ms = models.DateTimeField(default=None)
-    text = models.CharField(max_length=280)
-    geo = models.CharField(max_length=50)
-    coordinates = models.CharField(max_length=50)
-    place = models.CharField(max_length=100)
-    in_reply_to_screen_name = models.CharField(max_length=50)
-    user = models.ForeignKey('User', 
-    
-    _id = models.CharField(max_length=20)
-    created_at = models.CharField(max_length=150)
-    timezone = models.CharField(max_length=100)
-    lang = models.CharField(max_length=5)
-    profile_image_url = models.URLField()
-    name = models.CharField(max_length=40)
-    screen_name = models.CharField(max_length=60)
-    location = models.CharField(max_length=60)
-    url = models.CharField(max_length=200)
-    verified = models.BooleanField()
-    protected = models.BooleanField()
-    followers_count = models.IntegerField()
-    status_count = models.IntegerField()
-    """
     for result in results:
         j_data = result._json
         data = j_data
@@ -133,7 +82,7 @@ def get_track(request):
                                               in_reply_to_screen_name=data['in_reply_to_screen_name'],
                                               user=user)
         final.append(j_data)
-    return HttpResponse(final)
+    return redirect('/api/tweets/?text=&text__icontains=' + query)
 
 
 class TweetViewSet(mixins.ListModelMixin,
@@ -141,7 +90,7 @@ class TweetViewSet(mixins.ListModelMixin,
                    viewsets.GenericViewSet):
     serializer_class = TweetSerializer
     queryset = Tweets.objects.all()
-    filter_backends = (DjangoFilterBackend, SearchFilter)
+    filter_backends = (DjangoFilterBackend, OrderingFilter)
     pagination_class = LimitTenPagination
     filter_class = TweetFilter
 
@@ -151,7 +100,6 @@ class UserViewSet(mixins.ListModelMixin,
                   viewsets.GenericViewSet):
     serializer_class = UserSerializer
     queryset = User.objects.all()
-    filter_backends = (DjangoFilterBackend,)
-    # filter_fields = ('name', 'screen_name', 'location')
+    filter_backends = (DjangoFilterBackend, OrderingFilter)
     pagination_class = LimitTenPagination
     filter_class = UserFilter

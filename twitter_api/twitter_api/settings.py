@@ -11,7 +11,7 @@ https://docs.djangoproject.com/en/2.0/ref/settings/
 """
 
 import os
-
+from api.settings import REST_FRAMEWORK
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
@@ -23,7 +23,7 @@ SECRET_KEY = 'u^k5m5j5qi=-1le_&-vf8*-o@v%j*i30_%58(u(=#m(vo7@$tf'
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
-
+REST_FRAMEWORK = REST_FRAMEWORK
 ALLOWED_HOSTS = []
 
 # Application definition

@@ -29,4 +29,3 @@ urlpatterns = [
     url(r'^query/$', views.get_track, name='query'),
     url(r'^', include(router.urls))
 ]
-print(router.urls)
