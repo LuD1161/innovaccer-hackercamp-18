@@ -1,5 +1,30 @@
 # Setup
+### Install the following dependencies
+```
+pip install -r requirements.txt
+```
+### Setup the database
+1. Make a new database, named twitterapi
+2. Create a new mysql user, named twitterapi with password 12345
+3. Run the database on port 3306 ( default port )
+4. Below is the commands for setting up on linux
 
+```
+mysql -u root -p12345 # my mysql username is root and password is 12345
+# Now you will get mysql prompt
+create database twitterapi;
+create user 'twitterapi'@'localhost' identified by '12345';
+grant all privileges on twitterapi.* to 'twitterapi'@'localhost';
+```
+### Setting up django
+1. Make migrations
+2. Migrate new migrations
+3. Run server
+```
+python manage.py makemigrations
+python manage.py migrate
+python manage.py runserver
+```
 
 # API Endpoints 
 
@@ -29,3 +54,10 @@
 ### Descending
 **GET** `/api/tweets/?ordering=-text`
 **GET** `/api/users/?ordering=-_id`
+
+
+## P.S. 
+### Output of `python --version`
+```
+Python 2.7.14+
+```
