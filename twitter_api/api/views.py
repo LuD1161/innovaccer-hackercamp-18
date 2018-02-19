@@ -93,25 +93,35 @@ def get_track(request):
         j_data = result._json
         data = j_data
         user_d = data['user']
-        user = User.objects.create(_id=user_d['id'],
-                                   created_at=user_d['created_at'],
-                                   timezone=user_d['time_zone'],
-                                   lang=user_d['lang'],
-                                   profile_image_url=user_d['profile_image_url'],
-                                   name=user_d['name'],
-                                   screen_name=user_d['screen_name'],
-                                   location=user_d['location'],
-                                   url=user_d['url'],
-                                   verified=user_d['verified'],
-                                   protected=user_d['protected'],
-                                   followers_count=user_d['followers_count'],
-                                   status_count=user_d['statuses_count'])
-        tweet_obj = Tweets.objects.create(id=data['id'],
-                                          text=data['text'],
-                                          geo=data['geo'],
-                                          coordinates=data['coordinates'],
-                                          place=data['place'],
-                                          in_reply_to_screen_name=data['in_reply_to_screen_name'],
-                                          user=user)
+        try:
+            user = User.objects.get(_id=user_d['id'])
+            if user:
+                pass
+        except User.DoesNotExist:
+            user = User.objects.create(_id=user_d['id'],
+                                       created_at=user_d['created_at'],
+                                       timezone=user_d['time_zone'],
+                                       lang=user_d['lang'],
+                                       profile_image_url=user_d['profile_image_url'],
+                                       name=user_d['name'],
+                                       screen_name=user_d['screen_name'],
+                                       location=user_d['location'],
+                                       url=user_d['url'],
+                                       verified=user_d['verified'],
+                                       protected=user_d['protected'],
+                                       followers_count=user_d['followers_count'],
+                                       status_count=user_d['statuses_count'])
+        try:
+            tweet = Tweets.objects.get(id=data['id'])
+            if user:
+                pass
+        except Tweets.DoesNotExist:
+            tweet_obj = Tweets.objects.create(id=data['id'],
+                                              text=data['text'],
+                                              geo=data['geo'],
+                                              coordinates=data['coordinates'],
+                                              place=data['place'],
+                                              in_reply_to_screen_name=data['in_reply_to_screen_name'],
+                                              user=user)
         final.append(j_data)
     return HttpResponse(final)
