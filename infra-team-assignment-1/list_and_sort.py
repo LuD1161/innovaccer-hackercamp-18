@@ -14,7 +14,7 @@ big_files = heapq.nlargest(num_files, file_names, key=os.path.getsize)
 for b in big_files:
     print("{}MB\t{:>}".format(os.path.getsize(b) >> 20, b))
 
-input("Now sorting files")
+input("Now sorting files, Press Enter to continue ...")
 
 # get the desktop path
 desktop = os.path.join(os.path.join(os.path.expanduser('~')), 'Desktop')
@@ -48,4 +48,4 @@ for extension, file_list in extensions.iteritems():
     for fpath in file_list:
         fname = os.path.basename(fpath)
         os.rename(fpath, os.path.join(target_dir, fname))
-input("Done")
+input("Done. Press Enter to exit")
